@@ -118,15 +118,43 @@
       align-items: flex-start;
       text-decoration: none;
       color: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .top-game-item:hover {
+      opacity: 0.85;
+    }
+
+    .top-game-img-wrap {
+      position: relative;
+      flex-shrink: 0;
+      width: 260px;
+      height: 180px;
+      overflow: hidden;
     }
 
     .top-game-img {
-      width: 260px;
-      flex-shrink: 0;
-      height: 180px;
-      aspect-ratio: unset;
+      width: 100%;
+      height: 100%;
+      display: block;
       background: var(--nav-color);
       object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .top-game-item:hover .top-game-img {
+      transform: scale(1.05);
+    }
+
+    .top-game-more {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 6px 10px;
+      background: rgba(137, 0, 55, 0.85);
+      color: #ffffff;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-align: right;
     }
 
     .top-game-info {
@@ -369,7 +397,7 @@
       .game-detail { flex-direction: column; }
       .game-detail-cover { width: 100%; max-width: 160px; }
       .top-game-item { flex-direction: column; }
-      .top-game-img { width: 100%; aspect-ratio: 4/3; }
+      .top-game-img-wrap { width: 100%; aspect-ratio: 4/3; height: auto; }
     }
   </style>
 </head>
@@ -613,7 +641,10 @@
 
       <div class="top-game-list">
         <a class="top-game-item" href="game.html#taxonomica">
-          <img class="top-game-img" src="TaxonomiCa_pkg-img_MP.jpg" alt="TaxonomiCa パッケージ">
+          <div class="top-game-img-wrap">
+            <img class="top-game-img" src="TaxonomiCa_pkg-img_MP.jpg" alt="TaxonomiCa パッケージ">
+            <div class="top-game-more">詳しく見る →</div>
+          </div>
           <div class="top-game-info">
             <div class="top-game-title">TaxonomiCa <span class="top-game-sub">（タクソノミカ）</span></div>
             <div class="top-game-specs">
@@ -628,7 +659,10 @@
           </div>
         </a>
         <a class="top-game-item" href="game.html#boin">
-          <img class="top-game-img" src="Boinicch_pkg-img_MP.jpg" alt="ぼいんいっち手稿 パッケージ">
+          <div class="top-game-img-wrap">
+            <img class="top-game-img" src="Boinicch_pkg-img_MP.jpg" alt="ぼいんいっち手稿 パッケージ">
+            <div class="top-game-more">詳しく見る →</div>
+          </div>
           <div class="top-game-info">
             <div class="top-game-title">ぼいんいっち手稿</div>
             <div class="top-game-specs">
