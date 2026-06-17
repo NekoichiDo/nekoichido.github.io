@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サトー猫壱堂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #eaeaea;
+      --nav-color:   #d3ad9a;
+      --accent:      #890037;
+      --gray-dark:   #333333;
+      --black:       #000000;
+      --nav-width:   160px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .site-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      background-image: url('NekoichiDoWeb_BG.jpg');
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: transparent;
+      color: var(--gray-dark);
+    }
+
+    /* ─── 左ナビ ─── */
+    .site-nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--nav-width);
+      height: 100vh;
+      background: transparent;
+      border-right: 1.5px solid var(--bg);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      padding-top: 90px;
+    }
+
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-links li a {
+      display: block;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .nav-links li a img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .nav-links li a:hover {
+      opacity: 0.85;
+    }
+
+    /* ─── ロゴ：ナビの上に重なる形で左上固定 ─── */
+    .site-logo {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 110;
+      width: 280px;
+      padding: 12px 16px 8px;
+    }
+
+    .site-logo svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ─── メインコンテンツ ─── */
+    .site-main {
+      margin-left: var(--nav-width);
+      min-height: 100vh;
+      padding: 40px 56px 80px;
+    }
+
+    /* ─── ヒーローテキスト ─── */
+    .hero-text {
+      font-family: 'Meiryo', 'メイリオ', sans-serif;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--gray-dark);
+      margin-bottom: 48px;
+      margin-top: 0;
+    }
+
+    /* ─── TOPゲームリスト ─── */
+    .top-game-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .top-game-item {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .top-game-img {
+      width: 260px;
+      flex-shrink: 0;
+      height: 180px;
+      aspect-ratio: unset;
+      background: var(--nav-color);
+      object-fit: cover;
+    }
+
+    .top-game-info {
+      flex: 1;
+    }
+
+    .top-game-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gray-dark);
+      margin-bottom: 4px;
+    }
+
+    .top-game-sub {
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .top-game-specs {
+      font-size: 0.78rem;
+      line-height: 2;
+      color: var(--gray-dark);
+      margin-bottom: 14px;
+    }
+
+    .top-game-desc {
+      font-size: 0.85rem;
+      line-height: 1.9;
+      color: var(--gray-dark);
+    }
+
+    /* ─── セクション共通 ─── */
+    .section {
+      padding: 72px 0 64px;
+      border-top: 1px solid var(--nav-color);
+      max-width: 800px;
+    }
+
+    .section-title {
+      font-family: Impact, 'Arial Narrow', sans-serif;
+      font-weight: 400;
+      font-size: 1.5rem;
+      letter-spacing: 0.2em;
+      color: var(--gray-dark);
+      margin-bottom: 32px;
+      text-transform: uppercase;
+    }
+
+    /* ─── GAME詳細 ─── */
+    .game-detail {
+      display: flex;
+      gap: 36px;
+      margin-bottom: 56px;
+      align-items: flex-start;
+    }
+
+    .game-detail-cover {
+      width: 160px;
+      height: 210px;
+      background: var(--nav-color);
+      flex-shrink: 0;
+    }
+
+    .game-detail-info h3 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gray-dark);
+      margin-bottom: 6px;
+    }
+
+    .game-detail-info .game-sub {
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+
+    .game-specs {
+      font-size: 0.78rem;
+      line-height: 2;
+      color: var(--gray-dark);
+      margin-bottom: 16px;
+    }
+
+    .game-desc {
+      font-size: 0.85rem;
+      line-height: 1.9;
+      color: var(--gray-dark);
+    }
+
+    .game-divider {
+      border: none;
+      border-top: 1px solid var(--nav-color);
+      margin: 40px 0;
+    }
+
+    /* ─── PROF. ─── */
+    .prof-text {
+      font-size: 0.875rem;
+      line-height: 2;
+      margin-bottom: 36px;
+      color: var(--gray-dark);
+    }
+
+    .prof-works-title {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .work-item {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--nav-color);
+      align-items: flex-start;
+    }
+
+    .work-item-thumb {
+      width: 52px;
+      height: 52px;
+      background: var(--nav-color);
+      flex-shrink: 0;
+    }
+
+    .work-item-text h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--gray-dark);
+    }
+
+    .work-item-text p {
+      font-size: 0.75rem;
+      color: var(--accent);
+      line-height: 1.7;
+    }
+
+    /* ─── PROF.ブロック ─── */
+    .prof-block {
+      margin-bottom: 40px;
+    }
+
+    .prof-block-title {
+      font-family: 'Meiryo', 'メイリオ', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--nav-color);
+    }
+
+    /* ─── LINK ─── */
+    .link-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .link-list a {
+      font-size: 0.875rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+      display: inline-block;
+      transition: opacity 0.2s;
+    }
+
+    .link-list a:hover { opacity: 0.6; }
+
+    /* ─── フッター ─── */
+    .site-footer {
+      margin-top: 64px;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── ハンバーガー（スマホ） ─── */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 14px; right: 16px;
+      z-index: 200;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      padding: 8px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--gray-dark);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ─── レスポンシブ ─── */
+    @media (max-width: 768px) {
+      .site-nav {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+        background: transparent;
+        padding-top: 80px;
+        border-right: 1.5px solid var(--bg);
+      }
+
+      .site-nav.open { transform: translateX(0); }
+
+      .hamburger { display: flex; }
+
+      .site-logo { width: 220px; }
+
+      .site-main {
+        margin-left: 0;
+        padding: 80px 24px 60px;
+      }
+
+      .game-grid { gap: 20px; }
+      .game-card-img { width: 140px; height: 180px; }
+
+      .game-detail { flex-direction: column; }
+      .game-detail-cover { width: 100%; max-width: 160px; }
+      .top-game-item { flex-direction: column; }
+      .top-game-img { width: 100%; aspect-ratio: 4/3; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 固定背景 -->
+  <div class="site-bg"></div>
+
+  <!-- ロゴ（左上固定） -->
+  <a href="#top" style="display:block;"><div class="site-logo">
+    <svg id="logo-main"  xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 700 120">
+  <defs>
+    <style>
+      .logo-st0 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="logo-st0" d="M101.74,18.26C90.59,7.11,75.77.97,60,.97S29.41,7.11,18.26,18.26C7.11,29.41.97,44.23.97,60s6.14,30.59,17.29,41.74c11.15,11.15,25.97,17.29,41.74,17.29s30.59-6.14,41.74-17.29c11.15-11.15,17.29-25.97,17.29-41.74s-6.14-30.59-17.29-41.74Z"/>
+    <path d="M102.43,17.57C91.09,6.24,76.03,0,60,0S28.91,6.24,17.57,17.57C6.24,28.91,0,43.97,0,60s6.24,31.09,17.57,42.43c11.33,11.33,26.4,17.57,42.43,17.57s31.09-6.24,42.43-17.57c11.33-11.33,17.57-26.4,17.57-42.43s-6.24-31.09-17.57-42.43ZM60,5.81c29.93,0,54.19,24.26,54.19,54.19,0,11-3.28,21.24-8.92,29.79H14.73c-5.64-8.55-8.92-18.78-8.92-29.79C5.81,30.07,30.07,5.81,60,5.81Z"/>
+    <g>
+      <path d="M49.05,18.45h-11.12v6.05h-5.99v-6.05h-5.13v6.05h-6.05v6.61h6.05v.57h-6.05v.97h6.05v10.3h5.13v-10.3h5.99v10.3l-17.17,6.03h11.12l17.17-6.03v-10.3h6.05v-.97h-6.05v-.57h6.05v-6.61h-6.05v-6.05ZM37.92,31.68h-5.99v-.57h5.99v.57Z"/>
+      <polygon points="72.33 18.45 59.79 18.45 59.79 48.98 72.33 48.98 72.33 37.41 82.52 40.62 82.52 30.12 72.33 26.91 72.33 18.45"/>
+      <rect x="57.71" y="18.45" width="1.51" height="30.53"/>
+      <rect x="85.13" y="30.12" width="19.08" height="9.06"/>
+      <rect x="85.13" y="39.75" width="19.08" height=".87"/>
+    </g>
+    <g>
+      <ellipse class="logo-st0" cx="63.63" cy="96.94" rx="3.16" ry="2.21" transform="translate(-42.89 142.78) rotate(-80)"/>
+      <ellipse class="logo-st0" cx="69.21" cy="102.07" rx="3.16" ry="2.21" transform="translate(-53.79 110.98) rotate(-60)"/>
+      <ellipse class="logo-st0" cx="56.37" cy="96.98" rx="2.21" ry="3.16" transform="translate(-15.98 11.26) rotate(-10)"/>
+      <ellipse class="logo-st0" cx="50.79" cy="102.07" rx="2.21" ry="3.16" transform="translate(-44.23 39.07) rotate(-30)"/>
+      <path class="logo-st0" d="M58.71,112.88s-.45.28-1.79.28c-3.3,0-3.49-2.34-3.49-3.46v-.02c0-1.87,1.63-2.66,1.63-2.66.94-.45,1.45-1.17,1.45-1.63,0-1.93,1.56-3.49,3.49-3.49,1.93,0,3.49,1.56,3.49,3.49,0,.46.52,1.18,1.45,1.63,0,0,1.63.78,1.63,2.66v.02c0,1.13-.19,3.46-3.49,3.46-1.34,0-1.79-.28-1.79-.28-.71-.44-1.87-.44-2.58,0Z"/>
+    </g>
+    <g>
+      <path class="logo-st0" d="M72.87,94.98v1.16h27.51c.34-.38.68-.77,1.01-1.16h-28.52Z"/>
+      <path class="logo-st0" d="M76.32,102.2h17.68c.47-.38.94-.77,1.4-1.16h-19.07v1.16Z"/>
+      <path class="logo-st0" d="M72.87,108.26h11.81c.72-.37,1.44-.76,2.14-1.16h-13.95v1.16Z"/>
+      <path class="logo-st0" d="M47.13,94.98h-28.52c.33.39.67.78,1.01,1.16h27.51v-1.16Z"/>
+      <path class="logo-st0" d="M43.68,101.04h-19.07c.46.4.92.78,1.4,1.16h17.68v-1.16Z"/>
+      <path class="logo-st0" d="M47.13,107.1h-13.95c.7.4,1.42.79,2.14,1.16h11.81v-1.16Z"/>
+    </g>
+    <g>
+      <polygon points="84.02 59.72 77.69 59.72 77.69 62.7 77.69 76.02 84.02 76.02 84.02 62.7 90.09 62.7 95.82 62.7 101.89 62.7 101.89 76.02 108.22 76.02 108.22 62.7 108.22 59.72 101.89 59.72 95.82 59.72 95.82 52.74 90.09 52.74 90.09 59.72 84.02 59.72"/>
+      <polygon points="94.97 78.93 103.04 78.93 103.04 76.89 94.97 76.89 94.97 76.02 90.94 76.02 90.94 76.89 82.87 76.89 82.87 78.93 90.94 78.93 90.94 79.8 77.69 79.8 77.69 83.27 108.22 83.27 108.22 79.8 94.97 79.8 94.97 78.93"/>
+      <path d="M100.64,76.02v-12.33h-15.37v4.64h0v7.69h12.65s0,0,0,0h2.72ZM87.99,71.38v-3.05h9.94v3.05h-9.94Z"/>
+      <polygon points="98.69 52.74 98.69 59.26 108.22 52.74 98.69 52.74"/>
+      <polygon points="87.22 52.74 77.69 52.74 87.22 59.26 87.22 52.74"/>
+      <polygon points="67.88 67.77 67.88 75.41 75.07 67.77 75.07 65.3 49.72 65.3 44.54 65.3 44.54 67.77 44.54 83.25 49.72 83.25 49.72 67.77 67.88 67.77"/>
+      <polygon points="57.79 62.36 49.72 62.36 49.72 64.4 69.89 64.4 69.89 62.36 61.83 62.36 61.83 61.46 75.07 61.46 75.07 55.13 61.83 55.13 61.83 52.74 57.79 52.74 57.79 55.13 44.54 55.13 44.54 61.46 57.79 61.46 57.79 62.36"/>
+      <polygon points="75.07 69.87 66.85 78.61 54.07 78.61 54.07 75.41 66.79 75.41 66.79 71.35 54.07 71.35 54.07 69.21 51.64 69.21 51.64 78.61 51.63 78.61 51.63 83.27 75.07 83.25 75.07 69.87"/>
+      <path d="M36.75,63.24c.25-.38.45-.79.61-1.21h4.08v-1.91h-3.69c0-.1.02-.2.02-.3v-.32h3.67v-1.91h-3.67v-4.82l-2.21,2.27c-1.1-.94-2.53-1.51-4.09-1.51s-2.99.57-4.09,1.51l-2.21-2.27v4.82h-3.57v1.91h3.57v.32c0,.1.01.2.02.3h-3.59v1.91h3.98c.18.47.4.91.68,1.32-.79.46-1.54,1.02-2.21,1.7-4.17,4.17-4.17,10.93,0,15.1s10.93,4.17,15.1,0c4.17-4.17,4.17-10.93,0-15.1-.73-.73-1.54-1.33-2.41-1.81ZM28.21,78.28c-1.26,0-2.29-1.02-2.29-2.29s1.02-2.29,2.29-2.29,2.29,1.02,2.29,2.29-1.02,2.29-2.29,2.29ZM28.21,71.48c-1.26,0-2.29-1.02-2.29-2.29s1.02-2.29,2.29-2.29,2.29,1.02,2.29,2.29-1.02,2.29-2.29,2.29ZM35.01,78.28c-1.26,0-2.29-1.02-2.29-2.29s1.02-2.29,2.29-2.29,2.29,1.02,2.29,2.29-1.02,2.29-2.29,2.29ZM35.01,71.48c-1.26,0-2.29-1.02-2.29-2.29s1.02-2.29,2.29-2.29,2.29,1.02,2.29,2.29-1.02,2.29-2.29,2.29Z"/>
+      <path d="M11.78,52.76v6.73c.55.58,1.05,1.21,1.48,1.89l-1.48,1.75v7.43l3.34-3.95c.05.46.08.93.08,1.4,0,.21,0,.42-.02.62l-3.41,4.03v1.77l3.11-3.68c-.5,2.21-1.6,4.19-3.11,5.78v6.73c5.23-3.07,8.75-8.75,8.75-15.25,0-1.2-.12-2.37-.35-3.51l.35-.41v-1.77l-.69.81c-.15-.51-.32-1.01-.51-1.5l1.2-1.42v-7.43l-3.71,4.39c-1.38-1.77-3.09-3.28-5.03-4.42Z"/>
+    </g>
+  </g>
+  <g>
+    <path d="M218.88,12.29h-32.4v18.92h-22.32V12.29h-14.86v18.92h-18.92v20.68h18.92v1.79h-18.92v3.04h18.92v32.2h14.86v-32.2h22.32v32.2l-56.1,18.85h32.4l56.1-18.85v-32.2h18.92v-3.04h-18.92v-1.79h18.92v-20.68h-18.92V12.29ZM186.48,53.68h-22.32v-1.79h22.32v1.79Z"/>
+    <polygon points="283.35 12.29 252.48 12.29 252.48 107.78 283.35 107.78 283.35 69.97 317.59 77.61 317.59 49.55 283.35 41.91 283.35 12.29"/>
+    <rect x="245.98" y="12.29" width="4.71" height="95.48"/>
+    <polygon points="624.3 34.07 604.52 34.07 604.52 43.38 604.52 85.03 624.3 85.03 624.3 43.38 643.31 43.38 661.21 43.38 680.21 43.38 680.21 85.03 700 85.03 700 43.38 700 34.07 680.21 34.07 661.21 34.07 661.21 12.22 643.31 12.22 643.31 34.07 624.3 34.07"/>
+    <polygon points="658.57 94.14 683.8 94.14 683.8 87.76 658.57 87.76 658.57 85.03 645.95 85.03 645.95 87.76 620.72 87.76 620.72 94.14 645.95 94.14 645.95 96.86 604.52 96.86 604.52 107.71 700 107.71 700 96.86 658.57 96.86 658.57 94.14"/>
+    <path d="M676.29,85.03v-38.56h-48.06v14.52h0v24.05h39.57s0,0,0,0h8.49ZM636.72,70.51v-9.53h31.07v9.53h-31.07Z"/>
+    <polygon points="670.18 12.22 670.18 32.62 700 12.22 670.18 12.22"/>
+    <polygon points="634.34 12.22 604.52 12.22 634.34 32.62 634.34 12.22"/>
+    <g>
+      <rect x="325.76" y="49.55" width="64.45" height="23.55"/>
+      <rect x="325.76" y="74.89" width="64.45" height="2.73"/>
+    </g>
+    <polygon points="573.85 59.21 573.85 83.11 596.34 59.21 596.34 51.51 517.06 51.51 500.86 51.51 500.86 59.21 500.86 107.64 517.06 107.64 517.06 59.21 573.85 59.21"/>
+    <polygon points="542.29 42.31 517.06 42.31 517.06 48.7 580.14 48.7 580.14 42.31 554.91 42.31 554.91 39.5 596.34 39.5 596.34 19.7 554.91 19.7 554.91 12.22 542.29 12.22 542.29 19.7 500.86 19.7 500.86 39.5 542.29 39.5 542.29 42.31"/>
+    <polygon points="596.34 65.79 570.61 93.12 530.66 93.12 530.66 83.11 570.43 83.11 570.43 70.43 530.66 70.43 530.66 63.73 523.05 63.73 523.05 93.12 523.01 93.12 523.01 107.71 596.34 107.64 596.34 65.79"/>
+    <path d="M476.5,45.05c.77-1.18,1.41-2.46,1.91-3.8h12.76v-5.96h-11.53c.02-.32.05-.63.05-.95v-.99h11.48v-5.96h-11.48v-15.09l-6.9,7.1c-3.44-2.94-7.9-4.73-12.78-4.73s-9.34,1.79-12.78,4.73l-6.9-7.1v15.09h-11.18v5.96h11.18v.99c0,.32.03.63.05.95h-11.23v5.96h12.45c.55,1.47,1.25,2.86,2.12,4.14-2.47,1.43-4.81,3.2-6.92,5.31-13.04,13.04-13.04,34.19,0,47.23,13.04,13.04,34.19,13.04,47.23,0,13.04-13.04,13.04-34.19,0-47.23-2.29-2.29-4.83-4.17-7.53-5.65ZM449.79,92.09c-3.95,0-7.16-3.2-7.16-7.16s3.2-7.16,7.16-7.16,7.16,3.2,7.16,7.16-3.2,7.16-7.16,7.16ZM449.79,70.84c-3.95,0-7.16-3.2-7.16-7.16s3.2-7.16,7.16-7.16,7.16,3.2,7.16,7.16-3.2,7.16-7.16,7.16ZM471.03,92.09c-3.95,0-7.16-3.2-7.16-7.16s3.2-7.16,7.16-7.16,7.16,3.2,7.16,7.16-3.2,7.16-7.16,7.16ZM471.03,70.84c-3.95,0-7.16-3.2-7.16-7.16s3.2-7.16,7.16-7.16,7.16,3.2,7.16,7.16-3.2,7.16-7.16,7.16Z"/>
+    <path d="M398.39,12.29v21.05c1.73,1.81,3.28,3.8,4.64,5.92l-4.64,5.49v23.22l10.44-12.35c.16,1.44.26,2.9.26,4.38,0,.66-.02,1.31-.05,1.95l-10.65,12.6v5.53l9.73-11.51c-1.57,6.91-5,13.12-9.73,18.08v21.05c16.36-9.6,27.35-27.37,27.35-47.71,0-3.76-.38-7.42-1.09-10.97l1.09-1.29v-5.53l-2.15,2.54c-.46-1.6-1-3.16-1.59-4.7l3.74-4.43V12.4l-11.6,13.73c-4.31-5.55-9.65-10.26-15.74-13.83Z"/>
+  </g>
+</svg>
+  </div></a>
+
+  <!-- ハンバーガー -->
+  <button class="hamburger" id="hamburger" aria-label="メニュー">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- 左ナビ -->
+  <nav class="site-nav" id="site-nav">
+    <ul class="nav-links">
+      <li><a href="#top" aria-label="GAME"><svg id="nav-game" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 60">
+  <defs>
+    <style>
+      .ngame-st0 {
+        fill: #d3ad9a;
+      }
+
+      .ngame-st1 {
+        fill: #890037;
+      }
+
+      .ngame-st2 {
+        fill: #333;
+      }
+
+      .ngame-st3 {
+        fill: #eaeaea;
+      }
+    </style>
+  </defs>
+  <rect class="ngame-st0" width="200" height="60"/>
+  <polygon class="ngame-st1" points="200 42.18 200 60 182.18 60 200 42.18"/>
+  <g>
+    <path class="ngame-st2" d="M45.63,24.43v16.36h7.3v-4.65h-4.53v-6.82h14.68v16.8c0,.56-.2,1.04-.6,1.44-.36.4-.88.6-1.44.6h-24.7c-.56,0-1.04-.2-1.44-.6s-.6-.88-.6-1.44v-25.66c0-.96.32-1.76,1-2.41.68-.68,1.48-1,2.41-1h25.66v7.38h-17.74Z"/>
+    <path class="ngame-st2" d="M91.47,48.17c-1.16,0-1.88-.56-2.17-1.64l-.92-3.65h-9.78l-.88,3.65c-.28,1.08-.96,1.64-2.13,1.64h-9.58l8.58-31.04h17.6l9.02,31s-9.74.04-9.74.04ZM83.41,23.79l-3.09,12.27h6.3s-3.21-12.27-3.21-12.27Z"/>
+    <path class="ngame-st2" d="M131.06,48.13v-15.28l-8.62,15.24h-2.69l-8.06-14.03v14.07h-7.38v-31.04h7.98c.76,0,1.32.32,1.68.96l8.3,15.2,9.02-15.2c.4-.64.96-.96,1.73-.96h8.26v31.04h-10.23,0Z"/>
+    <path class="ngame-st2" d="M158.21,24.47v4.69h14.24v7.34h-14.24v4.29h14.92v7.38h-26.31v-29.03c0-.56.2-1.04.6-1.44.44-.36.88-.56,1.44-.56h24.3v7.34h-14.96,0Z"/>
+  </g>
+  <g>
+    <path class="ngame-st3" d="M42.91,21.7v16.36h7.3v-4.65h-4.53v-6.82h14.68v16.8c0,.56-.2,1.04-.6,1.44-.36.4-.88.6-1.44.6h-24.7c-.56,0-1.04-.2-1.44-.6-.4-.4-.6-.88-.6-1.44v-25.66c0-.96.32-1.76,1-2.41.68-.68,1.48-1,2.41-1h25.66v7.38h-17.74Z"/>
+    <path class="ngame-st3" d="M88.74,45.44c-1.16,0-1.88-.56-2.17-1.64l-.92-3.65h-9.78l-.88,3.65c-.28,1.08-.96,1.64-2.13,1.64h-9.58l8.58-31.04h17.6l9.02,31-9.74.04h0ZM80.68,21.06l-3.09,12.27h6.3s-3.21-12.27-3.21-12.27Z"/>
+    <path class="ngame-st3" d="M128.33,45.4v-15.28l-8.62,15.24h-2.69l-8.06-14.04v14.08h-7.38V14.37h7.98c.76,0,1.32.32,1.68.96l8.3,15.2,9.02-15.2c.4-.64.96-.96,1.72-.96h8.26v31.04h-10.23.02Z"/>
+    <path class="ngame-st3" d="M155.48,21.75v4.69h14.24v7.34h-14.24v4.29h14.92v7.38h-26.31v-29.03c0-.56.2-1.04.6-1.44.44-.36.88-.56,1.44-.56h24.3v7.34h-14.96,0Z"/>
+  </g>
+</svg></a></li>
+      <li><a href="tips.html" aria-label="TIPS"><svg id="nav-tips"  xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 60">
+  <defs>
+    <style>
+      .ntips-st0 {
+        fill: #d3ad9a;
+      }
+
+      .ntips-st1 {
+        fill: #890037;
+      }
+
+      .ntips-st2 {
+        fill: #333;
+      }
+
+      .ntips-st3 {
+        fill: #eaeaea;
+      }
+    </style>
+  </defs>
+  <rect class="ntips-st0" width="200" height="60"/>
+  <polygon class="ntips-st1" points="200 42.18 200 60 182.18 60 200 42.18"/>
+  <g>
+    <path class="ntips-st2" d="M51.69,24.62v23.62h-12.47v-23.62h-8.3v-7.38h28.71v7.38h-7.94Z"/>
+    <path class="ntips-st2" d="M63.36,48.24v-31.04h11.39c.76,0,1.12.36,1.12,1.12v29.92h-12.51Z"/>
+    <path class="ntips-st2" d="M108.88,38.86c-1.12,1.12-2.45,1.68-4.01,1.68h-11.27v7.7h-11.39v-31.04h22.66c1.56,0,2.89.56,4.01,1.64,1.12,1.12,1.64,2.45,1.64,4.01v11.99c0,1.56-.52,2.93-1.64,4.01ZM99.18,24.58h-5.57v8.54h5.57v-8.54Z"/>
+    <path class="ntips-st2" d="M127.09,24.54v3.73h11.63c.96,0,1.76.32,2.45,1,.64.68.96,1.48.96,2.41v13.19c0,.96-.32,1.76-.96,2.41-.68.68-1.48,1-2.45,1h-19.69c-.92,0-1.72-.32-2.41-1-.64-.64-1-1.44-1-2.41v-6.46h9.02v2.53h6.05v-5.29h-11.67c-.92,0-1.72-.36-2.41-1-.64-.68-1-1.48-1-2.41v-11.67c0-.96.36-1.76,1-2.41.68-.68,1.48-1,2.41-1h23.26v7.38h-15.2Z"/>
+  </g>
+  <g>
+    <path class="ntips-st3" d="M48.96,21.89v23.62h-12.47v-23.62h-8.3v-7.38h28.71v7.38h-7.94Z"/>
+    <path class="ntips-st3" d="M60.64,45.51V14.48h11.39c.76,0,1.12.36,1.12,1.12v29.92h-12.51Z"/>
+    <path class="ntips-st3" d="M106.15,36.13c-1.12,1.12-2.45,1.68-4.01,1.68h-11.27v7.7h-11.39V14.48h22.66c1.56,0,2.89.56,4.01,1.64,1.12,1.12,1.64,2.45,1.64,4.01v11.99c0,1.56-.52,2.93-1.64,4.01ZM96.45,21.85h-5.57v8.54h5.57v-8.54Z"/>
+    <path class="ntips-st3" d="M124.36,21.81v3.73h11.63c.96,0,1.76.32,2.45,1,.64.68.96,1.48.96,2.41v13.19c0,.96-.32,1.76-.96,2.41-.68.68-1.48,1-2.45,1h-19.69c-.92,0-1.72-.32-2.41-1-.64-.64-1-1.44-1-2.41v-6.46h9.02v2.53h6.05v-5.29h-11.67c-.92,0-1.72-.36-2.41-1-.64-.68-1-1.48-1-2.41v-11.67c0-.96.36-1.76,1-2.41.68-.68,1.48-1,2.41-1h23.26v7.38h-15.2Z"/>
+  </g>
+</svg></a></li>
+      <li><a href="#prof" aria-label="PROF."><svg id="nav-prof" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 60">
+  <defs>
+    <style>
+      .nprof-st0 {
+        fill: #d3ad9a;
+      }
+
+      .nprof-st1 {
+        fill: #890037;
+      }
+
+      .nprof-st2 {
+        fill: #333;
+      }
+
+      .nprof-st3 {
+        fill: #eaeaea;
+      }
+    </style>
+  </defs>
+  <rect class="nprof-st0" width="200" height="60"/>
+  <polygon class="nprof-st1" points="200 42.18 200 60 182.18 60 200 42.18"/>
+  <g>
+    <path class="nprof-st2" d="M60.63,38.75c-1.12,1.12-2.45,1.68-4.01,1.68h-11.27v7.7h-11.39v-31.04h22.66c1.56,0,2.89.56,4.01,1.64,1.12,1.12,1.64,2.45,1.64,4.01v11.99c0,1.56-.52,2.93-1.64,4.01h0ZM50.93,24.47h-5.57v8.54h5.57s0-8.54,0-8.54Z"/>
+    <path class="nprof-st2" d="M87.3,48.17c-1.12,0-1.88-.52-2.33-1.56l-4.01-9.54h-2.17v11.07h-11.35v-31.08h22.18c1.6,0,2.93.56,4.05,1.64,1.12,1.12,1.68,2.45,1.68,4.01v8.66c0,2.12-.92,3.73-2.77,4.85l5.45,11.95h-10.75.02ZM85.1,23.87h-6.3v6.38h6.3s0-6.38,0-6.38Z"/>
+    <path class="nprof-st2" d="M128.97,46.53c-1.08,1.08-2.45,1.64-4.01,1.64h-17.8c-1.6,0-2.93-.56-4.05-1.64-1.12-1.12-1.68-2.45-1.68-4.01v-19.73c0-1.56.56-2.89,1.68-4.01,1.12-1.08,2.45-1.64,4.05-1.64h17.8c1.56,0,2.93.56,4.01,1.64,1.08,1.08,1.68,2.45,1.68,4.01v19.73c0,1.56-.56,2.89-1.68,4.01ZM119.23,24.47h-6.38v16.32h6.38v-16.32Z"/>
+    <path class="nprof-st2" d="M147.78,24.59v4.57h14.24v7.42h-14.24v11.55h-11.39v-28.99c0-.56.2-1.04.6-1.44s.88-.6,1.44-.6h24.26v7.5h-14.92,0Z"/>
+    <path class="nprof-st2" d="M174.57,48.53h-5.77c-.4,0-.6-.2-.6-.56v-5.61c0-.4.2-.6.6-.6h5.77c.4,0,.6.2.6.6v5.61c0,.36-.2.56-.6.56Z"/>
+  </g>
+  <g>
+    <path class="nprof-st3" d="M57.9,36.02c-1.12,1.12-2.45,1.68-4.01,1.68h-11.27v7.7h-11.39V14.37h22.66c1.56,0,2.89.56,4.01,1.64,1.12,1.12,1.64,2.45,1.64,4.01v11.99c0,1.56-.52,2.93-1.64,4.01ZM48.2,21.75h-5.57v8.54h5.57v-8.54Z"/>
+    <path class="nprof-st3" d="M84.57,45.44c-1.12,0-1.88-.52-2.33-1.56l-4.01-9.54h-2.17v11.07h-11.35V14.33h22.18c1.6,0,2.93.56,4.05,1.64,1.12,1.12,1.68,2.45,1.68,4.01v8.66c0,2.12-.92,3.73-2.77,4.85l5.45,11.95h-10.75.02ZM82.37,21.14h-6.3v6.38h6.3v-6.38Z"/>
+    <path class="nprof-st3" d="M126.24,43.8c-1.08,1.08-2.45,1.64-4.01,1.64h-17.8c-1.6,0-2.93-.56-4.05-1.64-1.12-1.12-1.68-2.45-1.68-4.01v-19.73c0-1.56.56-2.89,1.68-4.01,1.12-1.08,2.45-1.64,4.05-1.64h17.8c1.56,0,2.93.56,4.01,1.64s1.68,2.45,1.68,4.01v19.73c0,1.56-.56,2.89-1.68,4.01ZM116.5,21.75h-6.38v16.32h6.38v-16.32Z"/>
+    <path class="nprof-st3" d="M145.05,21.87v4.57h14.24v7.42h-14.24v11.55h-11.39v-28.99c0-.56.2-1.04.6-1.44s.88-.6,1.44-.6h24.26v7.5h-14.92,0Z"/>
+    <path class="nprof-st3" d="M171.85,45.81h-5.77c-.4,0-.6-.2-.6-.56v-5.61c0-.4.2-.6.6-.6h5.77c.4,0,.6.2.6.6v5.61c0,.36-.2.56-.6.56Z"/>
+  </g>
+</svg></a></li>
+      <li><a href="#link" aria-label="LINK"><svg id="nav-link" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 60">
+  <defs>
+    <style>
+      .nlink-st0 {
+        fill: #d3ad9a;
+      }
+
+      .nlink-st1 {
+        fill: #890037;
+      }
+
+      .nlink-st2 {
+        fill: #333;
+      }
+
+      .nlink-st3 {
+        fill: #eaeaea;
+      }
+    </style>
+  </defs>
+  <rect class="nlink-st0" width="200" height="60"/>
+  <polygon class="nlink-st1" points="200 42.18 200 60 182.18 60 200 42.18"/>
+  <g>
+    <path class="nlink-st2" d="M59.35,47.57c-.4.4-.92.6-1.48.6h-21.85c-.56,0-1.04-.2-1.44-.6-.4-.36-.6-.84-.6-1.44v-28.99h12.51v23.7h4.85v-5.61h8.62v10.91c0,.6-.2,1.08-.6,1.44h0Z"/>
+    <path class="nlink-st2" d="M64.89,48.13v-31.04h11.39c.76,0,1.12.36,1.12,1.12v29.91h-12.51Z"/>
+    <path class="nlink-st2" d="M107.39,48.17c-.76,0-1.4-.28-1.96-.8l-13.71-14.07v14.84h-7.98v-31.04h6.82c.76,0,1.4.28,1.96.8l13.91,14.2v-15h7.94v31.08h-6.98,0Z"/>
+    <path class="nlink-st2" d="M140.76,47.85c-1.12,0-1.88-.52-2.29-1.56l-3.89-9.94-3.13,3.89v7.62h-11.27v-30.84h10.15c.76,0,1.12.36,1.12,1.12v10.22l8.94-11.35h9.66l-7.86,9.82,8.66,21.01h-10.11.02Z"/>
+  </g>
+  <g>
+    <path class="nlink-st3" d="M56.62,44.84c-.4.4-.92.6-1.48.6h-21.85c-.56,0-1.04-.2-1.44-.6-.4-.36-.6-.84-.6-1.44V14.41h12.51v23.7h4.85v-5.61h8.62v10.91c0,.6-.2,1.08-.6,1.44h-.01Z"/>
+    <path class="nlink-st3" d="M62.16,45.4V14.37h11.39c.76,0,1.12.36,1.12,1.12v29.91h-12.51Z"/>
+    <path class="nlink-st3" d="M104.67,45.44c-.76,0-1.4-.28-1.96-.8l-13.71-14.07v14.84h-7.98V14.37h6.82c.76,0,1.4.28,1.96.8l13.91,14.2v-15h7.94v31.08h-6.98,0Z"/>
+    <path class="nlink-st3" d="M138.03,45.12c-1.12,0-1.88-.52-2.29-1.56l-3.89-9.94-3.13,3.89v7.62h-11.27V14.29h10.15c.76,0,1.12.36,1.12,1.12v10.23l8.94-11.35h9.66l-7.86,9.82,8.66,21.01h-10.11.02Z"/>
+  </g>
+</svg></a></li>
+    </ul>
+  </nav>
+
+  <!-- メインコンテンツ -->
+  <main class="site-main">
+
+    <section id="top" style="padding-top: 50px;">
+      <p class="hero-text">
+        ボドゲ業界の隅っこにいるアマチュアアートワーカー・佐藤猫壱の<br>
+        趣味的な創作活動スペース。<br>
+        個人制作のボードゲームや、関わったプロジェクトの制作記録など。
+      </p>
+
+      <div class="top-game-list">
+        <a class="top-game-item" href="game.html#taxonomica">
+          <img class="top-game-img" src="TaxonomiCa_pkg-img_MP.jpg" alt="TaxonomiCa パッケージ">
+          <div class="top-game-info">
+            <div class="top-game-title">TaxonomiCa <span class="top-game-sub">（タクソノミカ）</span></div>
+            <div class="top-game-specs">
+              プレイ人数：3〜7人<br>
+              プレイ時間：15分程度<br>
+              対象年齢：10歳以上
+            </div>
+            <p class="top-game-desc">
+              生物分類群（Taxon）をテーマにした「いきものカード」を使ったカードゲームパッケージ。<br>
+              トリックテイキング「TrickTaxon」と推理ゲーム「LogicTaxon」の2つの遊び方ができます。
+            </p>
+          </div>
+        </a>
+        <a class="top-game-item" href="game.html#boin">
+          <img class="top-game-img" src="Boinicch_pkg-img_MP.jpg" alt="ぼいんいっち手稿 パッケージ">
+          <div class="top-game-info">
+            <div class="top-game-title">ぼいんいっち手稿</div>
+            <div class="top-game-specs">
+              プレイ人数：3〜6人<br>
+              プレイ時間：15〜30分<br>
+              対象年齢：10歳以上
+            </div>
+            <p class="top-game-desc">
+              子音カードと母音チップで単語を作り、ジェスチャーとヒントカードで当ててもらうクイズゲーム。<br>
+              使いにくい文字ほど高得点。戦略っぽく遊んでも、ノリで遊んでもヨシ。
+            </p>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="section" id="prof">
+      <div class="section-title">Profile</div>
+
+      <p class="prof-text">
+        ボードゲーム製作サークル・ブッコで、デザイナー・倉橋良平のアイデアを形にすることはや十数年。<br>
+        自分でもイチから作ってみるかー、とゆるく始めた個人サークル『サトー猫壱堂』のサークル主。<br>
+        最近になって、ちょっときちんとやろうと思いようやくこのサイトを立ち上げました。
+      </p>
+
+      <div class="prof-block">
+        <h3 class="prof-block-title">ゲーム製作</h3>
+        <p class="prof-text">
+          現在のところイラスト等も含めてすべて単独でやっている、ぼっちプロジェクト。<br>
+          つくりたいものをつくる、自己満足的な傾向強め。
+        </p>
+      </div>
+
+      <div class="prof-block">
+        <h3 class="prof-block-title">製作活動履歴</h3>
+        <p class="prof-text">
+          ブッコ（+それ以前の活動）では30作品以上のゲームのコンポーネント設計・アートワーク・ルール編集に携わっています。<br>
+          知識の少ないところから手探り失敗もありつつ、やや独特なアプローチも含め経験してきました。<br>
+          極小ロットでそこそこうまいことやる手段はそれなりに持っていると思います。
+        </p>
+
+      </div>
+
+      <div class="prof-block">
+        <h3 class="prof-block-title">ボドゲ外の経歴・スキル</h3>
+        <p class="prof-text">
+          社会人劇団の宣伝美術を十数年（……をやってるうちになぜか役者もやってた）、30公演ぶんくらい。<br>
+          本業はノベルティグッズなどを作る業種、特殊印刷機器やレーザー加工が扱えます。<br>
+          商品企画・設計もちょこっと関与。グッズ関連の知識やアイデアはある方です。<br>
+          最近ではこの本業関連でAIを使ってIllustratorのJSXスクリプトを作ることも。カットトンボ自動生成などボドゲ作りにも役立ったりしています。
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="link">
+      <div class="section-title">link</div>
+      <ul class="link-list">
+        <li><a href="https://x.com/Nekoichido" target="_blank">X（旧Twitter）@Nekoichido</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">© サトー猫壱堂</footer>
+
+  </main>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('site-nav');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      nav.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        nav.classList.remove('open');
+      });
+    });
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
